@@ -1,0 +1,88 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .header {
+        background-color: #f2f2f2;
+        border-bottom: 1px solid #b3b3b3;
+        padding: 10px 20px;
+        h3 {
+            margin: 0;
+        }
+    }
+    
+    .body {
+        flex-grow: 1;
+        overflow-y: auto;
+        flex-direction: row;
+        display: flex;
+
+        .transactions {
+            height: 100%;
+            width: 30%;
+            overflow-y: auto;
+            background-color: #cecece;
+            padding: 5px;
+
+            .transaction {
+                margin: 5px 0px;
+                display: flex;
+                flex-direction: row;
+                padding: 3px;
+                background-color: white;
+                border-radius: 5px;
+
+                &.credit {
+                    background-color: #e5ffb3;
+                }
+
+                &.remove {
+                    background-color: #ffceb3;
+                }
+
+                &.purchase {
+                    background-color: #b3dcff;
+                }
+
+                &.fund {
+                    background-color: #f5ffb3;
+                }
+
+                .amount {
+                    flex: 0 0 0px;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .description {
+                    margin-left: 5px;
+                    flex: 1 0 0px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                &:first-child {
+                    margin-top: 0px;
+                }
+
+                &:last-child {
+                    margin-bottom: 0px;
+                }
+            }
+        }
+        .submit {
+            flex: 1 0 0px;
+            height: 100%;
+            padding: 15px;
+        }
+    }
+    
+    .footer {
+        padding: 10px;
+        background-color: #f2f2f2;
+
+        color: white;
+    }
+}

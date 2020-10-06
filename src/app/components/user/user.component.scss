@@ -1,0 +1,112 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #cecece;
+    padding: 5px 0px;
+    align-items: center;
+
+    .body {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: row;
+        padding-right: 15px;
+
+        h4 {
+            margin: 0;
+            flex: 2 0 0px;
+            align-items: center;
+            display: flex;
+        }
+
+        p {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            flex: 1 0 0px;
+        }
+
+        .balance {
+            display: flex;
+            flex: 1 0 0px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+    }
+
+    .end, .balance {
+        .btn {
+            color: white;
+            font-weight: bold;
+        }
+    }
+}
+
+
+.block {
+    display: flex;
+    align-items: center;
+    padding: 0px 5px;
+    flex: 0 0 0px; 
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+    height: 30px;
+    margin-bottom: 0;
+
+	input {
+		opacity: 0;
+		width: 0;
+        height: 0;
+        
+        &:checked {
+            + .slider {
+                background-color: #2196F3;
+                &:before {
+                    -webkit-transform: translateX(24px);
+                    -ms-transform: translateX(24px);
+                    transform: translateX(24px);
+                }
+            }
+        }
+        &:focus {
+            + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+        }
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        margin-left: 5px;
+        &:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        &.round {
+            border-radius: 34px;
+            &:before {
+                border-radius: 50%;
+            }
+        }
+    }
+}

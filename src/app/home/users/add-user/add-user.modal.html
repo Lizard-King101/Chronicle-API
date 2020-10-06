@@ -1,0 +1,54 @@
+<div class="header">
+    <h3>{{ editing ? 'Edit' : 'Add' }} User</h3>
+</div>
+<div class="body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="username">User Name</label>
+                <input [(ngModel)]="user.username" type="text" id="username" class="form-control">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="firstname">First Name</label>                
+                <input id="firstname" type="text" class="form-control" [(ngModel)]="user.first_name"> 
+            </div>
+            <div class="col-sm-6">
+                <label for="lastname">Last Name</label>
+                <input id="lastname" type="text" class="form-control" [(ngModel)]="user.last_name">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="email">Email Address</label>
+                <input id="email" type="text" class="form-control" [(ngModel)]="user.email">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="pass">Password</label>                
+                <input id="pass" type="text" class="form-control" [(ngModel)]="pass"> 
+            </div>
+            <div class="col-sm-6">
+                <label for="pass_conf">Confirm Password</label>
+                <input id="pass_conf" type="text" class="form-control" [(ngModel)]="pass_conf">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="conteinr-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <a class="btn btn-danger btn-block" (click)="onCancel()">Cancel</a>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-primary btn-block" (click)="onSave()">{{ (editing ? 'Save' : 'Create') }}</a>
+            </div>
+        </div>
+    </div>
+</div>
