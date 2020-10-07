@@ -28,12 +28,7 @@ global.paths = {
     modules: path.join(__dirname, 'modules')
 };
 global.io = io;
-if(deploy) {
-  global.database = JSON.parse(fs.readFileSync(path.join(__dirname, 'deploydb.conf.json')));
-} else {
-  global.database = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.conf.json')));
-}
-global.random = JSON.parse(fs.readFileSync(path.join(__dirname, 'random.conf.json')));
+global.database = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.conf.json')));
 
 
 const post = require(path.join(global.paths.modules, 'post'));
