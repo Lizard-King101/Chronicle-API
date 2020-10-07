@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 
 const db = require('../database');
-const wheel = require('../wheel');
 const email = require('../email');
 const io = global.io;
 
