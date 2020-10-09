@@ -10,11 +10,14 @@ import Swal from 'sweetalert2';
     styleUrls: ['balance.modal.scss']
 })
 export class BalanceModal {
-    transactions;
+    transactions: any[];
+    currencies: any[];
+    balances: any[];
     user
 
     transaction: Transaction = {
         type: null,
+        currency: null,
         amount: 0,
         description: ''
     }
@@ -23,9 +26,10 @@ export class BalanceModal {
         @Inject(MAT_DIALOG_DATA) public transactionData,
         public dialogRef: MatDialogRef<BalanceModal>, 
         private data: DataManagerService) { 
-            this.transactions = transactionData.transactions;
+            this.transactions = transactionData.data.transactions;
+            this.currencies = transactionData.data.currencies;
+            this.balances = transactionData.data.balances;
             this.user = transactionData.user;
-            
         }
 
     submit() {
@@ -36,8 +40,15 @@ export class BalanceModal {
                     text: data.err
                 });
             } else {
-                this.user.balance = data.balance;
-                this.transactions.push(data.transaction);
+                let found = false;
+                this.balances.forEach((balance, index) => {
+                    if(balance.currency == data.balance.currency) {
+                        found = true;
+                        this.balances[index].balance = data.balance.balance;
+                    }
+                });
+                if(!found) this.balances.push(data.balance);
+                this.transactions.unshift(data.transaction);
             }
             
         })
@@ -50,6 +61,7 @@ export class BalanceModal {
 
 interface Transaction {
     type: 'purchase' | 'credit' | 'remove';
+    currency: number;
     amount: number;
     description: string;
 }

@@ -56,14 +56,17 @@ export class UserComponent implements OnInit{
     }
 
     editBalance() {
-        this.data.post('user_transactions', {user_id: this.user.id}).then((transactions) => {
-            console.log(transactions);
+        this.data.post('user_transactions', {user_id: this.user.id}).then((data) => {
+            console.log(data);
             
-            let modal = this.modal.open(BalanceModal, {width: '50%',data: {transactions, user:this.user}});
+            let modal = this.modal.open(BalanceModal, {width: '50%',data: {data, user:this.user}});
              // modal.afterClosed().subscribe(() => {
             // })
         })
-       
+    }
+
+    onPermissions() {
+
     }
 }
 

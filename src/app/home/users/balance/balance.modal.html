@@ -1,20 +1,39 @@
 <div class="header">
-    <h3>User Balance <span>${{user.balance.toFixed(2)}}</span></h3>
+    <h3>User Balance</h3>
 </div>
 <div class="body">
         <div class="transactions">
             <div class="transaction" *ngFor="let tran of transactions" [class.credit]="tran.type == 'credit'" [class.remove]="tran.type == 'remove'" [class.purchase]="tran.type == 'purchase'" [class.fund]="tran.type == 'fund'">
-                <div class="amount">${{tran.amount.toFixed(2)}}</div>
+                <div class="amount">{{tran.symbol + tran.amount.toFixed(tran.accuracy)}}</div>
                 <div class="description">{{tran.description}}</div>
             </div>
         </div>
         <div class="submit">
+            <table>
+                <tr>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                </tr>
+                <tr *ngFor="let bal of balances">
+                    <td>{{bal.symbol}}</td>
+                    <td>{{bal.balance.toFixed(bal.accuracy)}}</td>
+                </tr>
+            </table>
+
             <div class="form-group">
                 <label for="transactionType">Type</label>
                 <select id="transactionType" class="form-control" [(ngModel)]="transaction.type">
-                    <option value="">Select</option>
+                    <option value="" selected>Select</option>
                     <option value="credit">Credit</option>
                     <option value="remove">Remove</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="transactionType">Currency</label>
+                <select id="transactionType" class="form-control" [(ngModel)]="transaction.currency">
+                    <option value="" selected>Select</option>
+                    <option *ngFor="let cur of currencies" [value]="cur.id">{{cur.symbol + ' ' + (1).toFixed(cur.accuracy)}}</option>
                 </select>
             </div>
 

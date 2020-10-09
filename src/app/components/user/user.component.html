@@ -2,6 +2,14 @@
 <div class="body">
     <h4>{{ user.first_name + ' ' + user.last_name }}</h4>
     <p class="description">{{ user.username }}</p>
+    <div class="balance">
+        <a class="btn btn-sm btn-primary" (click)="editBalance()">
+            Balance
+        </a>
+    </div>
+    <a class="btn btn-primary" (click)="onPermissions()">
+        Permissions
+    </a>
 </div>
 <div class="end">
     <a class="btn btn-primary btn-sm" (click)="onEdit()">Edit <i class="fas fa-edit"></i></a> &nbsp;

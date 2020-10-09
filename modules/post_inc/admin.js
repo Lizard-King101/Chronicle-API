@@ -4,6 +4,7 @@ const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
 const notifications = require('../notifications');
+const helpers = require('../helpers');
 
 function Process(options) {
     let POST = options.POST;
@@ -120,32 +121,55 @@ function Process(options) {
                     })
                 }
                 break;
-                
+
             case 'user_transactions':
-                db.query(`SELECT * FROM payment_transactions WHERE user_id = '${POST.user_id}' ORDER BY dt_submited DESC LIMIT 20`).then((rows) => {
-                    res(rows);
-                });
+                let transactions = await db.query(`SELECT t.*, c.symbol, c.accuracy FROM transactions t JOIN currencies c ON (c.id = t.currency) WHERE t.user_id = '${POST.user_id}' ORDER BY t.dt_submited DESC LIMIT 20`);
+                let currencies = await db.query(`SELECT * FROM currencies`);
+                let balances = await db.query(`SELECT ac.currency, ac.balance, c.symbol, c.accuracy FROM account_balances ac JOIN currencies c ON (c.id = ac.currency) WHERE ac.user_id = '${POST.user_id}'`);
+                res({
+                    transactions,
+                    currencies,
+                    balances
+                })
                 break;
             case 'submit_transaction':
                 if(POST.user_id) {
-                    let user = await db.getRow(`SELECT * FROM accounts WHERE id = '${POST.user_id}'`);
-                    if(user) {
-                        let tmp = POST.transaction;
-                        tmp.user_id = POST.user_id;
-                        tmp.dt_submited = new Date();
-                        console.log('TMP', tmp);
+                    let balance = await db.getRow(`SELECT * FROM account_balances ac JOIN currencies c ON (c.id = ac.currency) WHERE ac.user_id = '${POST.user_id}' AND ac.currency = '${POST.transaction.currency}'`);
+                    let currency = await db.getRow(`SELECT * FROM currencies WHERE id = '${POST.transaction.currency}'`);
+                    let tmp = POST.transaction;
+                    tmp.user_id = POST.user_id;
+                    tmp.dt_submited = helpers.dateFormatUTC(new Date());
+                    console.log('TMP', tmp);
+                    if(balance) {
+                        
                         let modify = tmp.type == 'credit' ? tmp.amount : -tmp.amount;
-                        let newBalance = user.balance + modify;
+                        let newBalance = balance.balance = balance.balance + modify;
+                        console.log(newBalance);
                         if(newBalance >= 0) {
-                            db.update({table: 'accounts', data: {balance: newBalance}, where: `id = ${POST.user_id}`});
-                            db.insert('payment_transactions', tmp);
-                            res({balance: newBalance, transaction: tmp});
+                            db.update({table: 'account_balances', data: {balance: newBalance}, where: `user_id = ${POST.user_id} AND currency = ${POST.transaction.currency}`});
+                            db.insert('transactions', tmp);
+                            tmp.symbol = currency.symbol;
+                            tmp.accuracy = currency.accuracy;
+                            res({balance: balance, transaction: tmp});
                         } else {
                             res({err: 'Cannot create negative balance'});
                         }
+                    } else if(POST.transaction.type == 'credit'){
                         
+                        let bal = {
+                            user_id: POST.user_id,
+                            currency: POST.transaction.currency,
+                            balance: tmp.amount
+                        }
+                        db.insert('account_balances', bal);
+                        db.insert('transactions', tmp);
+                        bal.symbol = currency.symbol;
+                        bal.accuracy = currency.accuracy;
+                        tmp.symbol = currency.symbol;
+                        tmp.accuracy = currency.accuracy;
+                        res({balance: bal, transaction: tmp});
                     } else {
-                        res({err: 'User not found'});
+                        res({err: 'Cannot create negative balance'});
                     }
                 } else {
                     res({err: 'No user supplied'});

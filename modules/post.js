@@ -25,7 +25,6 @@ function Process(req, res){
         cookies,
         request: req,
     }
-    console.log(urlArr);
     
     try {
         var processor = require(path.join(__dirname, 'post_inc', postFile));
